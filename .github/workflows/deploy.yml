@@ -1,0 +1,30 @@
+name: Azure Deployment
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: 'nimsara-ecom-server'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_765C4700021C45B382F9A343940F5805 }}
+          package: ./backend
